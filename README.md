@@ -102,11 +102,6 @@ Colors used: 3 out of 4 selected
 
 ---
 
-## Team
-| Name | Register Number |
-|------|----------------|
-| Member 1 | XXXXXXXX |
-| Member 2 | XXXXXXXX |
 
 ---
 
