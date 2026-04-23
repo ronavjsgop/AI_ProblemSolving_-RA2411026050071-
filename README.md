@@ -101,6 +101,10 @@ Colors used: 3 out of 4 selected
 - ✅ Smart hint tells user the minimum colors needed before solving
 
 ---
+## PRESENTED BY 
+| Name | Register Number |
+|------|----------------|
+| RONAV JS GOP | RA2411026050071|
 
 
 ---
