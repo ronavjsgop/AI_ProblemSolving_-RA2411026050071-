@@ -1,409 +1,584 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Map Coloring CSP</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #f5f0e8; --card: #ffffff; --border: #e0d8cc;
-      --accent: #e07b4f; --accent2: #4f9e7b;
-      --text: #2c2416; --muted: #8a7d6a;
-      --shadow: 0 2px 12px rgba(80,60,20,0.08);
-    }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
-    header { background: var(--card); border-bottom: 1.5px solid var(--border); padding: 18px 32px; display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow); }
-    header .logo { width: 36px; height: 36px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-    header h1 { font-size: 1.2rem; font-weight: 600; }
-    header span { font-size: 0.8rem; color: var(--muted); background: var(--bg); border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; margin-left: auto; font-family: 'DM Mono', monospace; }
-    .main { display: flex; flex: 1; height: calc(100vh - 73px); }
-    .canvas-area { flex: 1; display: flex; flex-direction: column; padding: 24px; gap: 16px; }
-    canvas { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); flex: 1; width: 100%; }
-    .canvas-toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-    .mode-btn { padding: 8px 18px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--card); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
-    .mode-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .mode-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
-    .solve-btn { margin-left: auto; padding: 10px 28px; border-radius: 10px; border: none; background: var(--accent2); color: white; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
-    .solve-btn:hover { opacity: 0.88; transform: translateY(-1px); }
-    .reset-btn { padding: 10px 18px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--card); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.15s; }
-    .reset-btn:hover { border-color: #c0392b; color: #c0392b; }
-    .hint { font-size: 0.78rem; color: var(--muted); background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 6px 14px; }
-    .sidebar { width: 280px; background: var(--card); border-left: 1.5px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
-    .sidebar-section { padding: 20px; border-bottom: 1px solid var(--border); }
-    .sidebar-section h3 { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
-    .input-row { display: flex; gap: 8px; }
-    input[type="text"] { flex: 1; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; background: var(--bg); color: var(--text); outline: none; transition: border 0.15s; }
-    input[type="text"]:focus { border-color: var(--accent); }
-    .add-btn { padding: 8px 14px; border-radius: 8px; border: none; background: var(--accent); color: white; font-size: 1rem; cursor: pointer; }
-    .add-btn:hover { opacity: 0.85; }
-    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-    .tag { padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 500; font-family: 'DM Mono', monospace; border: 1.5px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; transition: all 0.12s; }
-    .tag:hover { border-color: #c0392b; color: #c0392b; }
-    .edge-hint { font-size: 0.75rem; color: var(--muted); margin-top: 8px; line-height: 1.5; }
-    .edge-list { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; max-height: 120px; overflow-y: auto; }
-    .edge-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-family: 'DM Mono', monospace; color: var(--muted); padding: 4px 8px; border-radius: 6px; background: var(--bg); }
-    .del-btn { background: none; border: none; color: #c0392b; cursor: pointer; font-size: 0.85rem; opacity: 0.6; }
-    .del-btn:hover { opacity: 1; }
-    .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-    .color-check { display: flex; align-items: center; gap: 7px; font-size: 0.82rem; }
-    .color-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
-    .status-box { padding: 20px; font-size: 0.82rem; color: var(--muted); line-height: 1.6; flex: 1; }
-    .status-box .result { font-size: 0.9rem; font-weight: 600; color: var(--accent2); margin-bottom: 8px; }
-    .sample-btn { width: 100%; padding: 9px; border-radius: 8px; border: 1.5px dashed var(--border); background: transparent; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; transition: all 0.15s; margin-top: 10px; }
-    .sample-btn:hover { border-color: var(--accent); color: var(--accent); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Map Coloring CSP</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f7f5f2;
+    --surface: #ffffff;
+    --border: #e2ddd8;
+    --text: #1a1814;
+    --muted: #8a8480;
+    --accent: #e85d3a;
+    --accent2: #2d7a4f;
+    --accent3: #3a6ee8;
+    --accent4: #c4a832;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 28px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 16px;
+  }
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.72rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: var(--muted);
+  }
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+  .sidebar {
+    width: 260px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    overflow-y: auto;
+  }
+  .section {
+    padding: 18px 18px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .input-row {
+    display: flex; gap: 8px;
+  }
+  input[type="text"] {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  input[type="text"]:focus { border-color: var(--accent); }
+  .btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-icon {
+    width: 34px; height: 34px; padding: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+  .btn-primary { background: var(--accent); color: white; }
+  .btn-primary:hover { background: #d44e2c; }
+  .btn-green { background: var(--accent2); color: white; }
+  .btn-green:hover { background: #256842; }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+  .btn-outline:hover { background: var(--bg); }
+  .btn-full { width: 100%; justify-content: center; display: flex; gap: 6px; }
+  .edge-inputs { display: flex; flex-direction: column; gap: 8px; }
+  .edge-row { display: flex; gap: 6px; align-items: center; }
+  .edge-sep { color: var(--muted); font-size: 0.8rem; }
+  #regionList { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
+  .region-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 6px 10px;
+    background: var(--bg);
+    border-radius: 6px;
+    font-size: 0.85rem;
+  }
+  .region-dot {
+    width: 12px; height: 12px; border-radius: 50%;
+    margin-right: 8px; flex-shrink: 0;
+    border: 2px solid rgba(0,0,0,0.1);
+  }
+  .region-name { flex: 1; display: flex; align-items: center; }
+  .region-del {
+    background: none; border: none; cursor: pointer;
+    color: var(--muted); font-size: 0.9rem; padding: 2px 4px;
+    border-radius: 4px;
+  }
+  .region-del:hover { color: var(--accent); background: #fff0ed; }
+  .color-checks { display: flex; flex-direction: column; gap: 6px; }
+  .color-check {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.875rem; cursor: pointer;
+  }
+  .color-swatch {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 2px solid rgba(0,0,0,0.15);
+  }
+  .canvas-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 20px;
+    gap: 14px;
+  }
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .mode-group {
+    display: flex;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .mode-btn {
+    padding: 8px 16px;
+    border: none;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.15s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .mode-btn.active {
+    background: var(--text);
+    color: white;
+  }
+  .mode-btn:hover:not(.active) { background: var(--bg); color: var(--text); }
+  .hint-text {
+    font-size: 0.8rem;
+    color: var(--muted);
+    padding: 8px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .spacer { flex: 1; }
+  .solve-btn {
+    padding: 9px 22px;
+    background: var(--accent2);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 8px;
+    transition: all 0.15s;
+    box-shadow: 0 2px 8px rgba(45,122,79,0.3);
+  }
+  .solve-btn:hover { background: #256842; transform: translateY(-1px); }
+  .reset-btn {
+    padding: 9px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.875rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .reset-btn:hover { background: var(--bg); color: var(--text); }
+  .canvas-wrapper {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: var(--shadow);
+  }
+  canvas {
+    width: 100%; height: 100%;
+    display: block;
+    cursor: crosshair;
+  }
+  .status-bar {
+    height: 38px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex; align-items: center;
+    padding: 0 16px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
+  .status-dot.ok { background: var(--accent2); }
+  .status-dot.err { background: var(--accent); }
+  #statusText { flex: 1; }
+  .empty-hint {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center; pointer-events: none;
+  }
+  .empty-hint .big { font-size: 2.5rem; margin-bottom: 8px; }
+  .empty-hint p { color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+</style>
 </head>
 <body>
+
 <header>
-  <div class="logo">🗺️</div>
-  <h1>Map Coloring — CSP Solver</h1>
-  <span>Constraint Satisfaction Problem</span>
+  <div class="logo">
+    <div class="logo-icon">🗺</div>
+    Map Coloring — CSP Solver
+  </div>
+  <span class="badge">Constraint Satisfaction Problem</span>
 </header>
+
 <div class="main">
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <div class="section">
+      <div class="section-title">Regions</div>
+      <div class="input-row">
+        <input type="text" id="regionInput" placeholder="Region name (e.g. A)" maxlength="10" />
+        <button class="btn btn-primary btn-icon" onclick="addRegion()" title="Add Region">+</button>
+      </div>
+      <div id="regionList"></div>
+      <button class="btn btn-outline btn-full" style="margin-top:10px" onclick="loadSample()">Load Sample Map</button>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Neighbors (Edges)</div>
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:10px">Use "Connect Regions" mode on canvas, or type below:</p>
+      <div class="edge-inputs">
+        <div class="edge-row">
+          <input type="text" id="edge1" placeholder="Region 1" style="width:80px;flex:none" />
+          <span class="edge-sep">↔</span>
+          <input type="text" id="edge2" placeholder="Region 2" style="width:80px;flex:none" />
+          <button class="btn btn-primary btn-icon" onclick="addEdgeManual()" title="Add Edge">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Available Colors</div>
+      <div class="color-checks">
+        <label class="color-check"><input type="checkbox" value="Red" checked /> <span class="color-swatch" style="background:#e85d3a"></span> Red</label>
+        <label class="color-check"><input type="checkbox" value="Green" checked /> <span class="color-swatch" style="background:#2d7a4f"></span> Green</label>
+        <label class="color-check"><input type="checkbox" value="Blue" checked /> <span class="color-swatch" style="background:#3a6ee8"></span> Blue</label>
+        <label class="color-check"><input type="checkbox" value="Yellow" checked /> <span class="color-swatch" style="background:#c4a832"></span> Yellow</label>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Canvas Area -->
   <div class="canvas-area">
-    <div class="canvas-toolbar">
-      <button class="mode-btn active" id="modeAdd" onclick="setMode('add')">➕ Add Region</button>
-      <button class="mode-btn" id="modeEdge" onclick="setMode('edge')">🔗 Connect Regions</button>
-      <button class="mode-btn" id="modeDrag" onclick="setMode('drag')">✋ Drag</button>
-      <div class="hint" id="hintText">Click on canvas to place a region</div>
-      <button class="reset-btn" onclick="resetAll()">🗑 Reset</button>
+    <div class="toolbar">
+      <div class="mode-group">
+        <button class="mode-btn active" id="modeAdd" onclick="setMode('add')">➕ Add Region</button>
+        <button class="mode-btn" id="modeConnect" onclick="setMode('connect')">🔗 Connect</button>
+        <button class="mode-btn" id="modeDrag" onclick="setMode('drag')">✋ Drag</button>
+      </div>
+      <div class="hint-text" id="hintText">Click on canvas to place a region</div>
+      <div class="spacer"></div>
+      <button class="reset-btn" onclick="resetAll()">⟳ Reset</button>
       <button class="solve-btn" onclick="solve()">▶ Solve with CSP</button>
     </div>
-    <canvas id="canvas"></canvas>
-  </div>
-  <div class="sidebar">
-    <div class="sidebar-section">
-      <h3>Regions</h3>
-      <div class="input-row">
-        <input type="text" id="regionInput" placeholder="Region name (e.g. A)" maxlength="6" />
-        <button class="add-btn" onclick="addRegionFromInput()">+</button>
+
+    <div class="canvas-wrapper">
+      <canvas id="canvas"></canvas>
+      <div class="empty-hint" id="emptyHint">
+        <div class="big">🗺</div>
+        <p>Add regions using the sidebar<br>or click "Load Sample Map" to start</p>
       </div>
-      <div class="tag-list" id="regionTags"></div>
-      <button class="sample-btn" onclick="loadSample()">Load Sample Map</button>
     </div>
-    <div class="sidebar-section">
-      <h3>Neighbors (Edges)</h3>
-      <div class="edge-hint">Switch to "Connect Regions" mode and click two nodes to add an edge.</div>
-      <div class="edge-list" id="edgeList"></div>
+
+    <div class="status-bar">
+      <div class="status-dot" id="statusDot"></div>
+      <span id="statusText">Ready — add regions and solve!</span>
     </div>
-    <div class="sidebar-section">
-      <h3>Available Colors</h3>
-      <div class="color-grid" id="colorGrid"></div>
-    </div>
-    <div class="status-box" id="statusBox">Add regions and connect neighbors, then click <strong>Solve with CSP</strong>.</div>
   </div>
 </div>
+
 <script>
-const COLORS = [
-  { name: 'Red', hex: '#e74c3c' }, { name: 'Green', hex: '#27ae60' },
-  { name: 'Blue', hex: '#2980b9' }, { name: 'Yellow', hex: '#f1c40f' },
-  { name: 'Orange', hex: '#e67e22' }, { name: 'Purple', hex: '#8e44ad' },
-];
-let nodes = [], edges = [], colorEnabled = [true,true,true,true,false,false];
-let mode = 'add', edgeSrc = null, dragging = null, dragOffset = {x:0,y:0}, nodeColors = {};
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
-function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; draw(); }
-window.addEventListener('resize', resize);
-setTimeout(resize, 50);
-function buildColorGrid() {
-  const grid = document.getElementById('colorGrid'); grid.innerHTML = '';
-  COLORS.forEach((c,i) => {
-    const label = document.createElement('label');
-    label.className = 'color-check';
-    label.innerHTML = `<input type="checkbox" ${colorEnabled[i]?'checked':''} onchange="toggleColor(${i},this.checked)"/><span class="color-dot" style="background:${c.hex}"></span>${c.name}`;
-    grid.appendChild(label);
-  });
-}
-buildColorGrid();
-function toggleColor(i,v) { colorEnabled[i]=v; }
-function setMode(m) {
-  mode=m; edgeSrc=null;
-  ['modeAdd','modeEdge','modeDrag'].forEach(id=>document.getElementById(id).classList.remove('active'));
-  document.getElementById('mode'+m.charAt(0).toUpperCase()+m.slice(1)).classList.add('active');
-  const hints={add:'Click on canvas to place a region',edge:'Click two regions to connect them',drag:'Click and drag regions'};
-  document.getElementById('hintText').textContent=hints[m]; draw();
-}
-function getNode(x,y) { return nodes.find(n=>Math.hypot(n.x-x,n.y-y)<26); }
-canvas.addEventListener('mousedown',e=>{
-  const r=canvas.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top;
-  if(mode==='drag'){const n=getNode(x,y);if(n){dragging=n;dragOffset={x:x-n.x,y:y-n.y};}}
-  else if(mode==='add'){if(!getNode(x,y)){const name=String.fromCharCode(65+nodes.length);nodes.push({id:name,x,y});nodeColors={};draw();updateTags();}}
-  else if(mode==='edge'){const n=getNode(x,y);if(n){if(!edgeSrc){edgeSrc=n;draw();}else if(edgeSrc!==n){const exists=edges.some(e=>(e[0]===edgeSrc.id&&e[1]===n.id)||(e[0]===n.id&&e[1]===edgeSrc.id));if(!exists){edges.push([edgeSrc.id,n.id]);nodeColors={};updateEdgeList();}edgeSrc=null;draw();}}}
-});
-canvas.addEventListener('mousemove',e=>{if(dragging){const r=canvas.getBoundingClientRect();dragging.x=e.clientX-r.left-dragOffset.x;dragging.y=e.clientY-r.top-dragOffset.y;draw();}});
-canvas.addEventListener('mouseup',()=>{dragging=null;});
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  edges.forEach(([a,b])=>{const na=nodes.find(n=>n.id===a),nb=nodes.find(n=>n.id===b);if(!na||!nb)return;ctx.beginPath();ctx.moveTo(na.x,na.y);ctx.lineTo(nb.x,nb.y);ctx.strokeStyle='#c8bfb0';ctx.lineWidth=2;ctx.stroke();});
-  nodes.forEach(n=>{
-    const col=nodeColors[n.id]||null, isSel=edgeSrc&&edgeSrc.id===n.id;
-    ctx.beginPath();ctx.arc(n.x,n.y,26,0,Math.PI*2);ctx.fillStyle=col?col:'#f5f0e8';ctx.fill();
-    ctx.strokeStyle=isSel?'#e07b4f':(col?'rgba(0,0,0,0.15)':'#c8bfb0');ctx.lineWidth=isSel?3:1.5;ctx.stroke();
-    ctx.fillStyle=col?'#fff':'#2c2416';ctx.font='bold 13px DM Sans,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(n.id,n.x,n.y);
-  });
-}
-function addRegionFromInput(){
-  const inp=document.getElementById('regionInput'), name=inp.value.trim().toUpperCase();
-  if(!name)return;if(nodes.find(n=>n.id===name)){inp.value='';return;}
-  const x=80+(nodes.length%5)*100, y=80+Math.floor(nodes.length/5)*100;
-  nodes.push({id:name,x,y});nodeColors={};inp.value='';draw();updateTags();
-}
-document.getElementById('regionInput').addEventListener('keydown',e=>{if(e.key==='Enter')addRegionFromInput();});
-function updateTags(){
-  const list=document.getElementById('regionTags');list.innerHTML='';
-  nodes.forEach(n=>{const tag=document.createElement('span');tag.className='tag';tag.textContent=n.id;tag.title='Click to delete';tag.onclick=()=>{nodes=nodes.filter(x=>x.id!==n.id);edges=edges.filter(([a,b])=>a!==n.id&&b!==n.id);nodeColors={};draw();updateTags();updateEdgeList();};list.appendChild(tag);});
-}
-function updateEdgeList(){
-  const list=document.getElementById('edgeList');list.innerHTML='';
-  edges.forEach(([a,b],i)=>{const item=document.createElement('div');item.className='edge-item';item.innerHTML=`${a} — ${b} <button class="del-btn" onclick="removeEdge(${i})">✕</button>`;list.appendChild(item);});
-}
-function removeEdge(i){edges.splice(i,1);nodeColors={};draw();updateEdgeList();}
-function resetAll(){nodes=[];edges=[];nodeColors={};edgeSrc=null;draw();updateTags();updateEdgeList();document.getElementById('statusBox').innerHTML='Add regions and connect neighbors, then click <strong>Solve with CSP</strong>.';}
-function loadSample(){
-  nodes=[{id:'WA',x:120,y:160},{id:'NT',x:260,y:120},{id:'SA',x:290,y:240},{id:'QLD',x:420,y:140},{id:'NSW',x:420,y:260},{id:'VIC',x:370,y:340},{id:'TAS',x:370,y:420}];
-  edges=[['WA','NT'],['WA','SA'],['NT','SA'],['NT','QLD'],['SA','QLD'],['SA','NSW'],['SA','VIC'],['QLD','NSW'],['NSW','VIC']];
-  nodeColors={};draw();updateTags();updateEdgeList();
-  document.getElementById('statusBox').innerHTML='Sample map loaded! Click <strong>▶ Solve with CSP</strong>.';
-}
-function getNeighborIds(id){return edges.flatMap(([a,b])=>a===id?[b]:b===id?[a]:[]);}
-function isSafe(id,color,assignment){return getNeighborIds(id).every(nb=>assignment[nb]!==color);}
-function backtrack(ids,assignment,colors){
-  if(Object.keys(assignment).length===ids.length)return true;
-  const id=ids.find(id=>!(id in assignment));
-  for(const color of colors){if(isSafe(id,color,assignment)){assignment[id]=color;if(backtrack(ids,assignment,colors))return true;delete assignment[id];}}
-  return false;
-}
-function solve(){
-  const colors=COLORS.filter((_,i)=>colorEnabled[i]).map(c=>c.hex);
-  if(!colors.length){document.getElementById('statusBox').innerHTML='<span style="color:#e74c3c">Please select at least one color!</span>';return;}
-  if(!nodes.length){document.getElementById('statusBox').innerHTML='<span style="color:#e74c3c">Please add some regions first!</span>';return;}
-  const assignment={};
-  if(backtrack(nodes.map(n=>n.id),assignment,colors)){
-    nodeColors=assignment;
-    document.getElementById('statusBox').innerHTML=`<div class="result">✅ Solved!</div>Used <strong>${new Set(Object.values(assignment)).size}</strong> color(s).<br/><br/>${Object.entries(assignment).map(([k,v])=>`<span style="display:inline-flex;align-items:center;gap:5px;margin:2px 4px 2px 0"><span style="width:10px;height:10px;border-radius:50%;background:${v};display:inline-block"></span>${k}</span>`).join('')}`;
-  } else {
-    nodeColors={};
-    document.getElementById('statusBox').innerHTML='<span style="color:#e74c3c">❌ No solution found. Try adding more colors.</span>';
-  }
+
+let nodes = {};
+let edges = [];
+let nodeColors = {};
+let mode = 'add';
+let connectFirst = null;
+let dragNode = null;
+let dragOffset = { x: 0, y: 0 };
+let nodeCounter = 0;
+
+const COLOR_MAP = {
+  Red: '#e85d3a',
+  Green: '#2d7a4f',
+  Blue: '#3a6ee8',
+  Yellow: '#c4a832'
+};
+
+function resize() {
+  const w = canvas.parentElement.clientWidth;
+  const h = canvas.parentElement.clientHeight;
+  canvas.width = w;
+  canvas.height = h;
   draw();
 }
+window.addEventListener('resize', resize);
+setTimeout(resize, 50);
+
+function setMode(m) {
+  mode = m;
+  connectFirst = null;
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('mode' + m.charAt(0).toUpperCase() + m.slice(1)).classList.add('active');
+  const hints = { add: 'Click on canvas to place a region', connect: 'Click two regions to connect them', drag: 'Click and drag regions to reposition' };
+  document.getElementById('hintText').textContent = hints[m];
+  canvas.style.cursor = m === 'drag' ? 'grab' : 'crosshair';
+  draw();
+}
+
+function addRegion(name, x, y) {
+  if (!name) {
+    const val = document.getElementById('regionInput').value.trim();
+    if (!val) { alert('Enter a region name!'); return; }
+    name = val;
+    document.getElementById('regionInput').value = '';
+  }
+  if (nodes[name]) { alert('Region already exists!'); return; }
+  if (!x) { x = 80 + Math.random() * (canvas.width - 160); y = 80 + Math.random() * (canvas.height - 160); }
+  nodes[name] = { x, y };
+  nodeColors[name] = null;
+  updateRegionList();
+  draw();
+  document.getElementById('emptyHint').style.display = 'none';
+}
+
+function removeRegion(name) {
+  delete nodes[name];
+  delete nodeColors[name];
+  edges = edges.filter(e => e[0] !== name && e[1] !== name);
+  updateRegionList();
+  draw();
+  if (Object.keys(nodes).length === 0) document.getElementById('emptyHint').style.display = '';
+}
+
+function updateRegionList() {
+  const list = document.getElementById('regionList');
+  list.innerHTML = '';
+  Object.keys(nodes).forEach(name => {
+    const col = nodeColors[name];
+    const item = document.createElement('div');
+    item.className = 'region-item';
+    item.innerHTML = `<span class="region-dot" style="background:${col ? COLOR_MAP[col] : '#ddd'}"></span><span class="region-name">${name}</span><button class="region-del" onclick="removeRegion('${name}')">✕</button>`;
+    list.appendChild(item);
+  });
+}
+
+function addEdgeManual() {
+  const a = document.getElementById('edge1').value.trim().toUpperCase();
+  const b = document.getElementById('edge2').value.trim().toUpperCase();
+  if (!nodes[a] || !nodes[b]) { alert('Both regions must exist!'); return; }
+  if (a === b) { alert('Cannot connect a region to itself!'); return; }
+  if (edges.some(e => (e[0]===a&&e[1]===b)||(e[0]===b&&e[1]===a))) { alert('Already connected!'); return; }
+  edges.push([a, b]);
+  document.getElementById('edge1').value = '';
+  document.getElementById('edge2').value = '';
+  draw();
+}
+
+function getNodeAt(x, y) {
+  for (const [name, pos] of Object.entries(nodes)) {
+    const dx = pos.x - x, dy = pos.y - y;
+    if (Math.sqrt(dx*dx+dy*dy) < 26) return name;
+  }
+  return null;
+}
+
+canvas.addEventListener('mousedown', e => {
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left, y = e.clientY - rect.top;
+  const hit = getNodeAt(x, y);
+  if (mode === 'add') {
+    if (!hit) {
+      const name = String.fromCharCode(65 + nodeCounter % 26) + (nodeCounter >= 26 ? Math.floor(nodeCounter/26) : '');
+      nodeCounter++;
+      addRegion(name, x, y);
+    }
+  } else if (mode === 'connect') {
+    if (hit) {
+      if (!connectFirst) { connectFirst = hit; draw(); }
+      else if (hit !== connectFirst) {
+        if (!edges.some(e => (e[0]===connectFirst&&e[1]===hit)||(e[0]===hit&&e[1]===connectFirst)))
+          edges.push([connectFirst, hit]);
+        connectFirst = null; draw();
+      } else { connectFirst = null; draw(); }
+    }
+  } else if (mode === 'drag') {
+    if (hit) {
+      dragNode = hit;
+      dragOffset = { x: x - nodes[hit].x, y: y - nodes[hit].y };
+      canvas.style.cursor = 'grabbing';
+    }
+  }
+});
+
+canvas.addEventListener('mousemove', e => {
+  if (mode === 'drag' && dragNode) {
+    const rect = canvas.getBoundingClientRect();
+    nodes[dragNode].x = e.clientX - rect.left - dragOffset.x;
+    nodes[dragNode].y = e.clientY - rect.top - dragOffset.y;
+    draw();
+  }
+});
+
+canvas.addEventListener('mouseup', () => {
+  dragNode = null;
+  if (mode === 'drag') canvas.style.cursor = 'grab';
+});
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Draw edges
+  ctx.lineWidth = 2;
+  edges.forEach(([a, b]) => {
+    if (!nodes[a] || !nodes[b]) return;
+    ctx.beginPath();
+    ctx.moveTo(nodes[a].x, nodes[a].y);
+    ctx.lineTo(nodes[b].x, nodes[b].y);
+    ctx.strokeStyle = '#d0ccc8';
+    ctx.stroke();
+  });
+  // Draw nodes
+  Object.entries(nodes).forEach(([name, pos]) => {
+    const col = nodeColors[name];
+    const isSelected = connectFirst === name;
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, 24, 0, Math.PI * 2);
+    ctx.fillStyle = col ? COLOR_MAP[col] : '#f0ede9';
+    ctx.fill();
+    ctx.lineWidth = isSelected ? 3 : 2;
+    ctx.strokeStyle = isSelected ? '#1a1814' : (col ? 'rgba(0,0,0,0.15)' : '#c8c4c0');
+    ctx.stroke();
+    ctx.fillStyle = col ? 'white' : '#1a1814';
+    ctx.font = 'bold 13px DM Sans, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(name, pos.x, pos.y);
+  });
+}
+
+function getColors() {
+  return [...document.querySelectorAll('.color-checks input:checked')].map(c => c.value);
+}
+
+function solve() {
+  const colors = getColors();
+  if (colors.length === 0) { setStatus('Please select at least one color!', 'err'); return; }
+  if (Object.keys(nodes).length === 0) { setStatus('Add some regions first!', 'err'); return; }
+  nodeColors = {};
+  Object.keys(nodes).forEach(n => nodeColors[n] = null);
+  const regions = Object.keys(nodes);
+  function getNeighbors(n) { return edges.filter(e => e[0]===n||e[1]===n).map(e => e[0]===n?e[1]:e[0]); }
+  function isValid(node, color) { return getNeighbors(node).every(nb => nodeColors[nb] !== color); }
+  function bt(idx) {
+    if (idx === regions.length) return true;
+    const node = regions[idx];
+    for (const color of colors) {
+      if (isValid(node, color)) {
+        nodeColors[node] = color;
+        if (bt(idx + 1)) return true;
+        nodeColors[node] = null;
+      }
+    }
+    return false;
+  }
+  if (bt(0)) {
+    updateRegionList(); draw();
+    setStatus(`✅ Solved! Used ${new Set(Object.values(nodeColors)).size} colors for ${regions.length} regions.`, 'ok');
+  } else {
+    nodeColors = {}; draw();
+    setStatus('❌ No solution found. Try adding more colors.', 'err');
+  }
+}
+
+function setStatus(msg, type) {
+  document.getElementById('statusText').textContent = msg;
+  const dot = document.getElementById('statusDot');
+  dot.className = 'status-dot' + (type ? ' ' + type : '');
+}
+
+function resetAll() {
+  nodes = {}; edges = []; nodeColors = {}; nodeCounter = 0; connectFirst = null;
+  updateRegionList(); draw();
+  setStatus('Reset — start fresh!', '');
+  document.getElementById('emptyHint').style.display = '';
+}
+
+function loadSample() {
+  resetAll();
+  document.getElementById('emptyHint').style.display = 'none';
+  const cx = canvas.width / 2, cy = canvas.height / 2;
+  const positions = { A:[cx-140,cy-80], B:[cx,cy-120], C:[cx+140,cy-80], D:[cx-80,cy+60], E:[cx+80,cy+60] };
+  Object.entries(positions).forEach(([n,[x,y]]) => addRegion(n, x, y));
+  [['A','B'],['A','D'],['B','C'],['B','D'],['B','E'],['C','E'],['D','E']].forEach(([a,b]) => edges.push([a,b]));
+  draw();
+  setStatus('Sample map loaded — click ▶ Solve with CSP!', '');
+}
+
+document.getElementById('regionInput').addEventListener('keydown', e => { if (e.key === 'Enter') addRegion(); });
 </script>
 </body>
 </html>
-ENDOFFILE
-echo "Done"
-Output
-
-Done
-Done
-
-You are out of free messages until 10:30 PM
-Get more
-
-
-
-Claude is AI and can make mistakes. Please double-check responses.
-Index · HTML
-Copy
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Map Coloring CSP</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #f5f0e8; --card: #ffffff; --border: #e0d8cc;
-      --accent: #e07b4f; --accent2: #4f9e7b;
-      --text: #2c2416; --muted: #8a7d6a;
-      --shadow: 0 2px 12px rgba(80,60,20,0.08);
-    }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
-    header { background: var(--card); border-bottom: 1.5px solid var(--border); padding: 18px 32px; display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow); }
-    header .logo { width: 36px; height: 36px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
-    header h1 { font-size: 1.2rem; font-weight: 600; }
-    header span { font-size: 0.8rem; color: var(--muted); background: var(--bg); border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; margin-left: auto; font-family: 'DM Mono', monospace; }
-    .main { display: flex; flex: 1; height: calc(100vh - 73px); }
-    .canvas-area { flex: 1; display: flex; flex-direction: column; padding: 24px; gap: 16px; }
-    canvas { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); flex: 1; width: 100%; }
-    .canvas-toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-    .mode-btn { padding: 8px 18px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--card); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
-    .mode-btn:hover { border-color: var(--accent); color: var(--accent); }
-    .mode-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
-    .solve-btn { margin-left: auto; padding: 10px 28px; border-radius: 10px; border: none; background: var(--accent2); color: white; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
-    .solve-btn:hover { opacity: 0.88; transform: translateY(-1px); }
-    .reset-btn { padding: 10px 18px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--card); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.15s; }
-    .reset-btn:hover { border-color: #c0392b; color: #c0392b; }
-    .hint { font-size: 0.78rem; color: var(--muted); background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 6px 14px; }
-    .sidebar { width: 280px; background: var(--card); border-left: 1.5px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
-    .sidebar-section { padding: 20px; border-bottom: 1px solid var(--border); }
-    .sidebar-section h3 { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
-    .input-row { display: flex; gap: 8px; }
-    input[type="text"] { flex: 1; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; background: var(--bg); color: var(--text); outline: none; transition: border 0.15s; }
-    input[type="text"]:focus { border-color: var(--accent); }
-    .add-btn { padding: 8px 14px; border-radius: 8px; border: none; background: var(--accent); color: white; font-size: 1rem; cursor: pointer; }
-    .add-btn:hover { opacity: 0.85; }
-    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
-    .tag { padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 500; font-family: 'DM Mono', monospace; border: 1.5px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; transition: all 0.12s; }
-    .tag:hover { border-color: #c0392b; color: #c0392b; }
-    .edge-hint { font-size: 0.75rem; color: var(--muted); margin-top: 8px; line-height: 1.5; }
-    .edge-list { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; max-height: 120px; overflow-y: auto; }
-    .edge-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-family: 'DM Mono', monospace; color: var(--muted); padding: 4px 8px; border-radius: 6px; background: var(--bg); }
-    .del-btn { background: none; border: none; color: #c0392b; cursor: pointer; font-size: 0.85rem; opacity: 0.6; }
-    .del-btn:hover { opacity: 1; }
-    .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-    .color-check { display: flex; align-items: center; gap: 7px; font-size: 0.82rem; }
-    .color-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
-    .status-box { padding: 20px; font-size: 0.82rem; color: var(--muted); line-height: 1.6; flex: 1; }
-    .status-box .result { font-size: 0.9rem; font-weight: 600; color: var(--accent2); margin-bottom: 8px; }
-    .sample-btn { width: 100%; padding: 9px; border-radius: 8px; border: 1.5px dashed var(--border); background: transparent; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; transition: all 0.15s; margin-top: 10px; }
-    .sample-btn:hover { border-color: var(--accent); color: var(--accent); }
-  </style>
-</head>
-<body>
-<header>
-  <div class="logo">🗺️</div>
-  <h1>Map Coloring — CSP Solver</h1>
-  <span>Constraint Satisfaction Problem</span>
-</header>
-<div class="main">
-  <div class="canvas-area">
-    <div class="canvas-toolbar">
-      <button class="mode-btn active" id="modeAdd" onclick="setMode('add')">➕ Add Region</button>
-      <button class="mode-btn" id="modeEdge" onclick="setMode('edge')">🔗 Connect Regions</button>
-      <button class="mode-btn" id="modeDrag" onclick="setMode('drag')">✋ Drag</button>
-      <div class="hint" id="hintText">Click on canvas to place a region</div>
-      <button class="reset-btn" onclick="resetAll()">🗑 Reset</button>
-      <button class="solve-btn" onclick="solve()">▶ Solve with CSP</button>
-    </div>
-    <canvas id="canvas"></canvas>
-  </div>
-  <div class="sidebar">
-    <div class="sidebar-section">
-      <h3>Regions</h3>
-      <div class="input-row">
-        <input type="text" id="regionInput" placeholder="Region name (e.g. A)" maxlength="6" />
-        <button class="add-btn" onclick="addRegionFromInput()">+</button>
-      </div>
-      <div class="tag-list" id="regionTags"></div>
-      <button class="sample-btn" onclick="loadSample()">Load Sample Map</button>
-    </div>
-    <div class="sidebar-section">
-      <h3>Neighbors (Edges)</h3>
-      <div class="edge-hint">Switch to "Connect Regions" mode and click two nodes to add an edge.</div>
-      <div class="edge-list" id="edgeList"></div>
-    </div>
-    <div class="sidebar-section">
-      <h3>Available Colors</h3>
-      <div class="color-grid" id="colorGrid"></div>
-    </div>
-    <div class="status-box" id="statusBox">Add regions and connect neighbors, then click <strong>Solve with CSP</strong>.</div>
-  </div>
-</div>
-<script>
-const COLORS = [
-  { name: 'Red', hex: '#e74c3c' }, { name: 'Green', hex: '#27ae60' },
-  { name: 'Blue', hex: '#2980b9' }, { name: 'Yellow', hex: '#f1c40f' },
-  { name: 'Orange', hex: '#e67e22' }, { name: 'Purple', hex: '#8e44ad' },
-];
-let nodes = [], edges = [], colorEnabled = [true,true,true,true,false,false];
-let mode = 'add', edgeSrc = null, dragging = null, dragOffset = {x:0,y:0}, nodeColors = {};
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; draw(); }
-window.addEventListener('resize', resize);
-setTimeout(resize, 50);
-function buildColorGrid() {
-  const grid = document.getElementById('colorGrid'); grid.innerHTML = '';
-  COLORS.forEach((c,i) => {
-    const label = document.createElement('label');
-    label.className = 'color-check';
-    label.innerHTML = `<input type="checkbox" ${colorEnabled[i]?'checked':''} onchange="toggleColor(${i},this.checked)"/><span class="color-dot" style="background:${c.hex}"></span>${c.name}`;
-    grid.appendChild(label);
-  });
-}
-buildColorGrid();
-function toggleColor(i,v) { colorEnabled[i]=v; }
-function setMode(m) {
-  mode=m; edgeSrc=null;
-  ['modeAdd','modeEdge','modeDrag'].forEach(id=>document.getElementById(id).classList.remove('active'));
-  document.getElementById('mode'+m.charAt(0).toUpperCase()+m.slice(1)).classList.add('active');
-  const hints={add:'Click on canvas to place a region',edge:'Click two regions to connect them',drag:'Click and drag regions'};
-  document.getElementById('hintText').textContent=hints[m]; draw();
-}
-function getNode(x,y) { return nodes.find(n=>Math.hypot(n.x-x,n.y-y)<26); }
-canvas.addEventListener('mousedown',e=>{
-  const r=canvas.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top;
-  if(mode==='drag'){const n=getNode(x,y);if(n){dragging=n;dragOffset={x:x-n.x,y:y-n.y};}}
-  else if(mode==='add'){if(!getNode(x,y)){const name=String.fromCharCode(65+nodes.length);nodes.push({id:name,x,y});nodeColors={};draw();updateTags();}}
-  else if(mode==='edge'){const n=getNode(x,y);if(n){if(!edgeSrc){edgeSrc=n;draw();}else if(edgeSrc!==n){const exists=edges.some(e=>(e[0]===edgeSrc.id&&e[1]===n.id)||(e[0]===n.id&&e[1]===edgeSrc.id));if(!exists){edges.push([edgeSrc.id,n.id]);nodeColors={};updateEdgeList();}edgeSrc=null;draw();}}}
-});
-canvas.addEventListener('mousemove',e=>{if(dragging){const r=canvas.getBoundingClientRect();dragging.x=e.clientX-r.left-dragOffset.x;dragging.y=e.clientY-r.top-dragOffset.y;draw();}});
-canvas.addEventListener('mouseup',()=>{dragging=null;});
-function draw(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  edges.forEach(([a,b])=>{const na=nodes.find(n=>n.id===a),nb=nodes.find(n=>n.id===b);if(!na||!nb)return;ctx.beginPath();ctx.moveTo(na.x,na.y);ctx.lineTo(nb.x,nb.y);ctx.strokeStyle='#c8bfb0';ctx.lineWidth=2;ctx.stroke();});
-  nodes.forEach(n=>{
-    const col=nodeColors[n.id]||null, isSel=edgeSrc&&edgeSrc.id===n.id;
-    ctx.beginPath();ctx.arc(n.x,n.y,26,0,Math.PI*2);ctx.fillStyle=col?col:'#f5f0e8';ctx.fill();
-    ctx.strokeStyle=isSel?'#e07b4f':(col?'rgba(0,0,0,0.15)':'#c8bfb0');ctx.lineWidth=isSel?3:1.5;ctx.stroke();
-    ctx.fillStyle=col?'#fff':'#2c2416';ctx.font='bold 13px DM Sans,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(n.id,n.x,n.y);
-  });
-}
-function addRegionFromInput(){
-  const inp=document.getElementById('regionInput'), name=inp.value.trim().toUpperCase();
-  if(!name)return;if(nodes.find(n=>n.id===name)){inp.value='';return;}
-  const x=80+(nodes.length%5)*100, y=80+Math.floor(nodes.length/5)*100;
-  nodes.push({id:name,x,y});nodeColors={};inp.value='';draw();updateTags();
-}
-document.getElementById('regionInput').addEventListener('keydown',e=>{if(e.key==='Enter')addRegionFromInput();});
-function updateTags(){
-  const list=document.getElementById('regionTags');list.innerHTML='';
-  nodes.forEach(n=>{const tag=document.createElement('span');tag.className='tag';tag.textContent=n.id;tag.title='Click to delete';tag.onclick=()=>{nodes=nodes.filter(x=>x.id!==n.id);edges=edges.filter(([a,b])=>a!==n.id&&b!==n.id);nodeColors={};draw();updateTags();updateEdgeList();};list.appendChild(tag);});
-}
-function updateEdgeList(){
-  const list=document.getElementById('edgeList');list.innerHTML='';
-  edges.forEach(([a,b],i)=>{const item=document.createElement('div');item.className='edge-item';item.innerHTML=`${a} — ${b} <button class="del-btn" onclick="removeEdge(${i})">✕</button>`;list.appendChild(item);});
-}
-function removeEdge(i){edges.splice(i,1);nodeColors={};draw();updateEdgeList();}
-function resetAll(){nodes=[];edges=[];nodeColors={};edgeSrc=null;draw();updateTags();updateEdgeList();document.getElementById('statusBox').innerHTML='Add regions and connect neighbors, then click <strong>Solve with CSP</strong>.';}
-function loadSample(){
-  nodes=[{id:'WA',x:120,y:160},{id:'NT',x:260,y:120},{id:'SA',x:290,y:240},{id:'QLD',x:420,y:140},{id:'NSW',x:420,y:260},{id:'VIC',x:370,y:340},{id:'TAS',x:370,y:420}];
-  edges=[['WA','NT'],['WA','SA'],['NT','SA'],['NT','QLD'],['SA','QLD'],['SA','NSW'],['SA','VIC'],['QLD','NSW'],['NSW','VIC']];
-  nodeColors={};draw();updateTags();updateEdgeList();
-  document.getElementById('statusBox').innerHTML='Sample map loaded! Click <strong>▶ Solve with CSP</strong>.';
-}
-function getNeighborIds(id){return edges.flatMap(([a,b])=>a===id?[b]:b===id?[a]:[]);}
-function isSafe(id,color,assignment){return getNeighborIds(id).every(nb=>assignment[nb]!==color);}
-function backtrack(ids,assignment,colors){
-  if(Object.keys(assignment).length===ids.length)return true;
-  const id=ids.find(id=>!(id in assignment));
-  for(const color of colors){if(isSafe(id,color,assignment)){assignment[id]=color;if(backtrack(ids,assignment,colors))return true;delete assignment[id];}}
-  return false;
-}
-function solve(){
-  const colors=COLORS.filter((_,i)=>colorEnabled[i]).map(c=>c.hex);
-  if(!colors.length){document.getElementById('statusBox').innerHTML='<span style="color:#e74c3c">Please select at least one color!</span>';return;}
-  if(!nodes.length){document.getElementById('statusBox').innerHTML='<span style="color:#e74c3c">Please add some regions first!</span>';return;}
-  const assignment={};
-  if(backtrack(nodes.map(n=>n.id),assignment,colors)){
-    nodeColors=assignment;
-    document.getElementById('statusBox').innerHTML=`<div class="result">✅ Solved!</div>Used <strong>${new Set(Object.values(assignment)).size}</strong> color(s).<br/><br/>${Object.entries(assignment).map(([k,v])=>`<span style="display:inline-flex;align-items:center;gap:5px;margin:2px 4px 2px 0"><span style="width:10px;height:10px;border-radius:50%;background:${v};display:inline-block"></span>${k}</span>`).join('')}`;
-  } else {
-    nodeColors={};
-    document.getElementById('statusBox').innerHTML='<span style="color:#e74c3c">❌ No solution found. Try adding more colors.</span>';
-  }
-  draw();
-}
-</script>
-</body>
-</html>
- 
