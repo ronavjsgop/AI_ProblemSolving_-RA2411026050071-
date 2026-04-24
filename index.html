@@ -1,790 +1,506 @@
+
+
+Claude finished the response :root, [data-mode="light"] { --onb-picto-rose: #C46686; --onb-picto-sage: #BCD1CA; --onb-picto-lavender: #CBCADB; --onb-picto-cream: #E3DACC; --onb-picto-blue: #6A9BCC; --onb-picto-olive: #788C5D; } [data-mode="dark"] { --onb-picto-ros
+
+pasted
+
+17:39
+Claude responded: I can see the full conversation history!
+I can see the full conversation history! You're at the point where you need to update your index.html with the new light-colored design.
+
+Let me help you do it the easiest way. In your VS Code terminal, run these commands one by one:
+
+Step 1 — Go to your folder:
+
+cd C:\Users\jeeva\MapColoring
+Step 2 — Open the file in VS Code:
+
+code index.html
+Step 3 — Select all and delete: Once VS Code opens the file, press Ctrl + A then Delete
+
+Step 4 — Paste the new code: I'll give you the new code right now — just say "give me the code" and I'll send the full HTML to paste in.
+
+Then save with Ctrl + S and run:
+
+git add .
+git commit -m "New light design"
+git push
+Your live link will automatically update in about 1-2 minutes to show the new design!
+
+Say "give me the code" and I'll send it! 😊
+
+You said: i want to update that index and gchage thaat qwebpage alone
+i want to update that index and gchage thaat qwebpage alone
+
+17:39
+Claude responded: Say "give me the code" and I'll send the full new HTML to paste!
+Say "give me the code" and I'll send the full new HTML to paste!
+
+But first — what design do you want? Here are your options:
+
+You said: [User dismissed — do not proceed, wait for next instruction]
+[User dismissed — do not proceed, wait for next instruction]
+
+17:39
+Claude responded: No problem!
+No problem! Just tell me what you want and I'll build it right away 😊
+
+You said: no this is the one i ewant
+no this is the one i ewant
+
+17:40
+Claude responded: Got it!
+Got it! You want to keep the same design I already built. Let's just get it properly updated on GitHub.
+
+In your VS Code terminal, run these one by one:
+
+Step 1:
+
+cd C:\Users\jeeva\MapColoring
+Step 2:
+
+code index.html
+This opens the file in VS Code. Then press Ctrl + A to select everything and Delete it.
+
+Then say "give me the code" and I'll send you the full HTML to paste in! 😊
+
+You said: PS C:\Users\jeeva\MapColoring> code index.
+PS C:\Users\jeeva\MapColoring> code index.html
+PS C:\Users\jeeva\MapColoring>
+
+17:41
+Claude responded: The file is now open in VS Code!
+The file is now open in VS Code!
+
+Now:
+
+Press Ctrl + A (select all the old code)
+Press Delete
+Then say "give me the code" and I'll send the full new HTML to paste in!
+You said: give me the code
+give me the code
+
+17:42
+Claude responded: Here's the full new code!
+Here's the full new code! Copy everything below and paste it in VS Code, then press Ctrl + S to save:
+
+
+Viewed a file, created a file, ran a command
+Viewed a file, created a file, ran a command
+
+Reading the frontend design skill
+
+Creating the new light-colored Map Coloring CSP web app
+index.html
+
+Writing the new index.html to outputs
+bash
+
+cat > /mnt/user-data/outputs/index.html << 'ENDOFFILE'
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Map Coloring CSP — AI Problem Solving</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #13131a;
-    --border: #2a2a3a;
-    --accent: #7c6af7;
-    --accent2: #f76a8c;
-    --accent3: #6af7c8;
-    --text: #e8e8f0;
-    --muted: #6b6b8a;
-    --solved: #6af7c8;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* Background grid */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image:
-      linear-gradient(rgba(124,106,247,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(124,106,247,0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
-
-  /* Header */
-  header {
-    padding: 60px 0 40px;
-    text-align: center;
-    position: relative;
-  }
-  .tag {
-    display: inline-block;
-    background: rgba(124,106,247,0.15);
-    border: 1px solid rgba(124,106,247,0.4);
-    color: var(--accent);
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 2px;
-    padding: 6px 16px;
-    border-radius: 2px;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-  }
-  h1 {
-    font-size: clamp(36px, 6vw, 72px);
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -2px;
-    margin-bottom: 16px;
-  }
-  h1 span { color: var(--accent); }
-  .subtitle {
-    color: var(--muted);
-    font-size: 16px;
-    max-width: 500px;
-    margin: 0 auto 40px;
-    line-height: 1.6;
-  }
-
-  /* Stats row */
-  .stats {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    margin-bottom: 60px;
-    flex-wrap: wrap;
-  }
-  .stat {
-    text-align: center;
-  }
-  .stat-num {
-    font-family: 'Space Mono', monospace;
-    font-size: 32px;
-    font-weight: 700;
-    color: var(--accent3);
-    display: block;
-  }
-  .stat-label {
-    font-size: 12px;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-
-  /* Main app card */
-  .app-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 40px;
-  }
-  .app-card-header {
-    background: rgba(124,106,247,0.08);
-    border-bottom: 1px solid var(--border);
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .dot { width: 10px; height: 10px; border-radius: 50%; }
-  .dot-r { background: #f76a8c; }
-  .dot-y { background: #f7c46a; }
-  .dot-g { background: #6af7c8; }
-  .app-title { margin-left: 8px; color: var(--text); }
-
-  .app-body { padding: 32px; }
-
-  /* Two column layout */
-  .two-col {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr;
-    gap: 32px;
-    align-items: start;
-  }
-  @media (max-width: 700px) {
-    .two-col { grid-template-columns: 1fr; }
-  }
-
-  /* Controls */
-  .section-label {
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: var(--accent);
-    text-transform: uppercase;
-    margin-bottom: 12px;
-  }
-  .input-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 12px;
-  }
-  input, select {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    color: var(--text);
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    padding: 10px 14px;
-    outline: none;
-    transition: border-color 0.2s;
-    width: 100%;
-  }
-  input:focus, select:focus { border-color: var(--accent); }
-  select option { background: var(--surface); }
-
-  btn, .btn {
-    display: inline-block;
-    cursor: pointer;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 3px;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-  .btn-primary {
-    background: var(--accent);
-    color: #fff;
-  }
-  .btn-primary:hover { background: #9585fa; transform: translateY(-1px); }
-  .btn-secondary {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--muted);
-  }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-solve {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff;
-    width: 100%;
-    padding: 14px;
-    font-size: 13px;
-    margin-top: 8px;
-  }
-  .btn-solve:hover { opacity: 0.9; transform: translateY(-1px); }
-  .btn-example {
-    background: rgba(106,247,200,0.1);
-    border: 1px solid rgba(106,247,200,0.3);
-    color: var(--accent3);
-    width: 100%;
-    padding: 10px;
-    font-size: 11px;
-    margin-top: 8px;
-  }
-  .btn-example:hover { background: rgba(106,247,200,0.2); }
-
-  /* Region chips */
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 12px 0;
-    min-height: 36px;
-  }
-  .chip {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(124,106,247,0.12);
-    border: 1px solid rgba(124,106,247,0.3);
-    border-radius: 2px;
-    padding: 4px 10px;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    color: var(--accent);
-    cursor: default;
-  }
-  .chip-x {
-    cursor: pointer;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1;
-  }
-  .chip-x:hover { color: var(--accent2); }
-
-  /* Adjacency list */
-  .adj-list {
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    color: var(--muted);
-    margin: 8px 0;
-    max-height: 100px;
-    overflow-y: auto;
-  }
-  .adj-item { padding: 3px 0; }
-  .adj-item span { color: var(--accent3); }
-
-  /* Color swatches */
-  .color-options {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin: 12px 0;
-  }
-  .color-opt {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    cursor: pointer;
-    padding: 6px 12px;
-    border-radius: 3px;
-    border: 1px solid var(--border);
-    font-family: 'Space Mono', monospace;
-    font-size: 11px;
-    color: var(--muted);
-    transition: all 0.2s;
-    user-select: none;
-  }
-  .color-opt.selected {
-    border-color: currentColor;
-    background: rgba(255,255,255,0.05);
-  }
-  .color-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-
-  /* Hint box */
-  .hint-box {
-    background: rgba(247,196,106,0.06);
-    border: 1px solid rgba(247,196,106,0.2);
-    border-radius: 3px;
-    padding: 12px 16px;
-    font-family: 'Space Mono', monospace;
-    font-size: 12px;
-    color: #f7c46a;
-    margin: 12px 0;
-    display: none;
-  }
-
-  /* Canvas */
-  #graphCanvas {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 3px;
-    display: block;
-  }
-
-  /* Result */
-  .result-box {
-    margin-top: 16px;
-    font-family: 'Space Mono', monospace;
-    font-size: 13px;
-    display: none;
-  }
-  .result-row {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .result-row:last-child { border-bottom: none; }
-  .result-region { color: var(--text); min-width: 60px; }
-  .result-arrow { color: var(--muted); }
-  .result-color-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
-  .result-color-name { }
-  .result-summary {
-    margin-top: 12px;
-    padding: 12px 16px;
-    background: rgba(106,247,200,0.06);
-    border: 1px solid rgba(106,247,200,0.2);
-    border-radius: 3px;
-    color: var(--accent3);
-    font-size: 12px;
-  }
-
-  /* Info section */
-  .info-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
-    margin-bottom: 40px;
-  }
-  .info-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 24px;
-  }
-  .info-card h3 {
-    font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: var(--accent);
-    font-family: 'Space Mono', monospace;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-  }
-  .info-card p, .info-card li {
-    font-size: 14px;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-  .info-card ul { padding-left: 16px; }
-  .info-card li { margin-bottom: 4px; }
-
-  /* Footer */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 32px 0;
-    text-align: center;
-    color: var(--muted);
-    font-size: 13px;
-    font-family: 'Space Mono', monospace;
-  }
-  footer a { color: var(--accent); text-decoration: none; }
-
-  .divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-    margin: 40px 0;
-  }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 4px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Map Coloring CSP</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f0e8; --card: #ffffff; --border: #e0d8cc;
+      --accent: #e07b4f; --accent2: #4f9e7b;
+      --text: #2c2416; --muted: #8a7d6a;
+      --shadow: 0 2px 12px rgba(80,60,20,0.08);
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    header { background: var(--card); border-bottom: 1.5px solid var(--border); padding: 18px 32px; display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow); }
+    header .logo { width: 36px; height: 36px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    header h1 { font-size: 1.2rem; font-weight: 600; }
+    header span { font-size: 0.8rem; color: var(--muted); background: var(--bg); border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; margin-left: auto; font-family: 'DM Mono', monospace; }
+    .main { display: flex; flex: 1; height: calc(100vh - 73px); }
+    .canvas-area { flex: 1; display: flex; flex-direction: column; padding: 24px; gap: 16px; }
+    canvas { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); flex: 1; width: 100%; }
+    .canvas-toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .mode-btn { padding: 8px 18px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--card); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .mode-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .mode-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+    .solve-btn { margin-left: auto; padding: 10px 28px; border-radius: 10px; border: none; background: var(--accent2); color: white; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .solve-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .reset-btn { padding: 10px 18px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--card); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.15s; }
+    .reset-btn:hover { border-color: #c0392b; color: #c0392b; }
+    .hint { font-size: 0.78rem; color: var(--muted); background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 6px 14px; }
+    .sidebar { width: 280px; background: var(--card); border-left: 1.5px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
+    .sidebar-section { padding: 20px; border-bottom: 1px solid var(--border); }
+    .sidebar-section h3 { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+    .input-row { display: flex; gap: 8px; }
+    input[type="text"] { flex: 1; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; background: var(--bg); color: var(--text); outline: none; transition: border 0.15s; }
+    input[type="text"]:focus { border-color: var(--accent); }
+    .add-btn { padding: 8px 14px; border-radius: 8px; border: none; background: var(--accent); color: white; font-size: 1rem; cursor: pointer; }
+    .add-btn:hover { opacity: 0.85; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .tag { padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 500; font-family: 'DM Mono', monospace; border: 1.5px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; transition: all 0.12s; }
+    .tag:hover { border-color: #c0392b; color: #c0392b; }
+    .edge-hint { font-size: 0.75rem; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+    .edge-list { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; max-height: 120px; overflow-y: auto; }
+    .edge-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-family: 'DM Mono', monospace; color: var(--muted); padding: 4px 8px; border-radius: 6px; background: var(--bg); }
+    .del-btn { background: none; border: none; color: #c0392b; cursor: pointer; font-size: 0.85rem; opacity: 0.6; }
+    .del-btn:hover { opacity: 1; }
+    .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+    .color-check { display: flex; align-items: center; gap: 7px; font-size: 0.82rem; }
+    .color-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+    .status-box { padding: 20px; font-size: 0.82rem; color: var(--muted); line-height: 1.6; flex: 1; }
+    .status-box .result { font-size: 0.9rem; font-weight: 600; color: var(--accent2); margin-bottom: 8px; }
+    .sample-btn { width: 100%; padding: 9px; border-radius: 8px; border: 1.5px dashed var(--border); background: transparent; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; transition: all 0.15s; margin-top: 10px; }
+    .sample-btn:hover { border-color: var(--accent); color: var(--accent); }
+  </style>
 </head>
 <body>
-<div class="container">
-
-  <header>
-    <div class="tag">AI Problem Solving — Problem 5</div>
-    <h1>Map <span>Coloring</span><br>CSP Solver</h1>
-    <p class="subtitle">Constraint Satisfaction Problem solver using backtracking with degree heuristic. No two adjacent regions share the same color.</p>
-    <div class="stats">
-      <div class="stat"><span class="stat-num">CSP</span><span class="stat-label">Algorithm</span></div>
-      <div class="stat"><span class="stat-num">4</span><span class="stat-label">Max Colors</span></div>
-      <div class="stat"><span class="stat-num">∞</span><span class="stat-label">Regions</span></div>
+<header>
+  <div class="logo">🗺️</div>
+  <h1>Map Coloring — CSP Solver</h1>
+  <span>Constraint Satisfaction Problem</span>
+</header>
+<div class="main">
+  <div class="canvas-area">
+    <div class="canvas-toolbar">
+      <button class="mode-btn active" id="modeAdd" onclick="setMode('add')">➕ Add Region</button>
+      <button class="mode-btn" id="modeEdge" onclick="setMode('edge')">🔗 Connect Regions</button>
+      <button class="mode-btn" id="modeDrag" onclick="setMode('drag')">✋ Drag</button>
+      <div class="hint" id="hintText">Click on canvas to place a region</div>
+      <button class="reset-btn" onclick="resetAll()">🗑 Reset</button>
+      <button class="solve-btn" onclick="solve()">▶ Solve with CSP</button>
     </div>
-  </header>
-
-  <!-- Main App -->
-  <div class="app-card">
-    <div class="app-card-header">
-      <div class="dot dot-r"></div>
-      <div class="dot dot-y"></div>
-      <div class="dot dot-g"></div>
-      <span class="app-title">map-coloring-csp.py — interactive</span>
-    </div>
-    <div class="app-body">
-      <div class="two-col">
-
-        <!-- Left: Controls -->
-        <div>
-          <!-- Regions -->
-          <div class="section-label">01 — Add Regions</div>
-          <div class="input-row">
-            <input type="text" id="regionInput" placeholder="Region name (e.g. A)" maxlength="10" />
-            <button class="btn btn-primary" onclick="addRegion()">Add</button>
-          </div>
-          <div class="chips" id="regionChips"></div>
-
-          <!-- Adjacency -->
-          <div class="section-label" style="margin-top:20px">02 — Define Adjacency</div>
-          <div class="input-row">
-            <select id="adjA"><option value="">Region 1</option></select>
-            <select id="adjB"><option value="">Region 2</option></select>
-            <button class="btn btn-primary" onclick="addAdj()">Link</button>
-          </div>
-          <div class="adj-list" id="adjList"></div>
-
-          <!-- Colors -->
-          <div class="section-label" style="margin-top:20px">03 — Select Colors</div>
-          <div class="color-options" id="colorOptions"></div>
-
-          <!-- Hint -->
-          <div class="hint-box" id="hintBox"></div>
-
-          <button class="btn btn-example" onclick="loadExample()">⚡ Load Example (A, B, C, D)</button>
-          <button class="btn btn-solve" onclick="solve()">▶ Solve CSP</button>
-          <button class="btn btn-secondary" style="width:100%;margin-top:8px" onclick="resetAll()">Reset Everything</button>
-        </div>
-
-        <!-- Right: Graph + Result -->
-        <div>
-          <div class="section-label">Graph Visualization</div>
-          <canvas id="graphCanvas" height="320"></canvas>
-          <div class="result-box" id="resultBox"></div>
-        </div>
-
+    <canvas id="canvas"></canvas>
+  </div>
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Regions</h3>
+      <div class="input-row">
+        <input type="text" id="regionInput" placeholder="Region name (e.g. A)" maxlength="6" />
+        <button class="add-btn" onclick="addRegionFromInput()">+</button>
       </div>
+      <div class="tag-list" id="regionTags"></div>
+      <button class="sample-btn" onclick="loadSample()">Load Sample Map</button>
     </div>
+    <div class="sidebar-section">
+      <h3>Neighbors (Edges)</h3>
+      <div class="edge-hint">Switch to "Connect Regions" mode and click two nodes to add an edge.</div>
+      <div class="edge-list" id="edgeList"></div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Available Colors</h3>
+      <div class="color-grid" id="colorGrid"></div>
+    </div>
+    <div class="status-box" id="statusBox">Add regions and connect neighbors, then click <strong>Solve with CSP</strong>.</div>
   </div>
-
-  <div class="divider"></div>
-
-  <!-- Info Cards -->
-  <div class="info-grid">
-    <div class="info-card">
-      <h3>Algorithm</h3>
-      <p>Uses <strong style="color:var(--text)">CSP Backtracking</strong> with degree heuristic — assigns colors to the most-constrained region first, backtracking when a conflict is found.</p>
-    </div>
-    <div class="info-card">
-      <h3>Four Color Theorem</h3>
-      <p>Any planar map can be colored using at most <strong style="color:var(--text)">4 colors</strong> such that no two adjacent regions share the same color. Proven in 1976.</p>
-    </div>
-    <div class="info-card">
-      <h3>How to Use</h3>
-      <ul>
-        <li>Add region names</li>
-        <li>Link neighboring regions</li>
-        <li>Select available colors</li>
-        <li>Click Solve CSP</li>
-      </ul>
-    </div>
-    <div class="info-card">
-      <h3>Sample Input</h3>
-      <p style="font-family:'Space Mono',monospace; font-size:12px; color:var(--accent3)">
-        Regions: A, B, C, D<br>
-        A↔B, A↔C, B↔C<br>
-        B↔D, C↔D<br>
-        Colors: Red, Green, Blue
-      </p>
-    </div>
-  </div>
-
 </div>
-
-<footer>
-  <div class="container">
-    AI Problem Solving Assignment — Problem 5: Map Coloring (CSP) &nbsp;|&nbsp;
-    <a href="https://github.com/RushdhamMalikck/AI_ProblemSolving_-RA2411026050221-" target="_blank">GitHub Repository</a>
-  </div>
-</footer>
-
 <script>
 const COLORS = [
-  { name: 'Crimson',  hex: '#e05252' },
-  { name: 'Indigo',   hex: '#7c6af7' },
-  { name: 'Emerald',  hex: '#52c97a' },
-  { name: 'Marigold', hex: '#f7c46a' },
-  { name: 'Sky',      hex: '#52b8e0' },
-  { name: 'Rose',     hex: '#f76a8c' },
-  { name: 'Mint',     hex: '#6af7c8' },
-  { name: 'Amber',    hex: '#f7a252' },
+  { name: 'Red', hex: '#e74c3c' }, { name: 'Green', hex: '#27ae60' },
+  { name: 'Blue', hex: '#2980b9' }, { name: 'Yellow', hex: '#f1c40f' },
+  { name: 'Orange', hex: '#e67e22' }, { name: 'Purple', hex: '#8e44ad' },
 ];
-
-let regions = [];
-let adjacency = {};
-let selectedColors = ['Crimson', 'Indigo', 'Emerald', 'Marigold'];
-
-// Init color options
-function initColors() {
-  const el = document.getElementById('colorOptions');
-  el.innerHTML = '';
-  COLORS.forEach(c => {
-    const div = document.createElement('div');
-    div.className = 'color-opt' + (selectedColors.includes(c.name) ? ' selected' : '');
-    div.style.color = c.hex;
-    div.innerHTML = `<div class="color-dot" style="background:${c.hex}"></div>${c.name}`;
-    div.onclick = () => toggleColor(c.name, div);
-    el.appendChild(div);
+let nodes = [], edges = [], colorEnabled = [true,true,true,true,false,false];
+let mode = 'add', edgeSrc = null, dragging = null, dragOffset = {x:0,y:0}, nodeColors = {};
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; draw(); }
+window.addEventListener('resize', resize);
+setTimeout(resize, 50);
+function buildColorGrid() {
+  const grid = document.getElementById('colorGrid'); grid.innerHTML = '';
+  COLORS.forEach((c,i) => {
+    const label = document.createElement('label');
+    label.className = 'color-check';
+    label.innerHTML = `<input type="checkbox" ${colorEnabled[i]?'checked':''} onchange="toggleColor(${i},this.checked)"/><span class="color-dot" style="background:${c.hex}"></span>${c.name}`;
+    grid.appendChild(label);
   });
 }
-
-function toggleColor(name, el) {
-  if (selectedColors.includes(name)) {
-    selectedColors = selectedColors.filter(c => c !== name);
-    el.classList.remove('selected');
+buildColorGrid();
+function toggleColor(i,v) { colorEnabled[i]=v; }
+function setMode(m) {
+  mode=m; edgeSrc=null;
+  ['modeAdd','modeEdge','modeDrag'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById('mode'+m.charAt(0).toUpperCase()+m.slice(1)).classList.add('active');
+  const hints={add:'Click on canvas to place a region',edge:'Click two regions to connect them',drag:'Click and drag regions'};
+  document.getElementById('hintText').textContent=hints[m]; draw();
+}
+function getNode(x,y) { return nodes.find(n=>Math.hypot(n.x-x,n.y-y)<26); }
+canvas.addEventListener('mousedown',e=>{
+  const r=canvas.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top;
+  if(mode==='drag'){const n=getNode(x,y);if(n){dragging=n;dragOffset={x:x-n.x,y:y-n.y};}}
+  else if(mode==='add'){if(!getNode(x,y)){const name=String.fromCharCode(65+nodes.length);nodes.push({id:name,x,y});nodeColors={};draw();updateTags();}}
+  else if(mode==='edge'){const n=getNode(x,y);if(n){if(!edgeSrc){edgeSrc=n;draw();}else if(edgeSrc!==n){const exists=edges.some(e=>(e[0]===edgeSrc.id&&e[1]===n.id)||(e[0]===n.id&&e[1]===edgeSrc.id));if(!exists){edges.push([edgeSrc.id,n.id]);nodeColors={};updateEdgeList();}edgeSrc=null;draw();}}}
+});
+canvas.addEventListener('mousemove',e=>{if(dragging){const r=canvas.getBoundingClientRect();dragging.x=e.clientX-r.left-dragOffset.x;dragging.y=e.clientY-r.top-dragOffset.y;draw();}});
+canvas.addEventListener('mouseup',()=>{dragging=null;});
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  edges.forEach(([a,b])=>{const na=nodes.find(n=>n.id===a),nb=nodes.find(n=>n.id===b);if(!na||!nb)return;ctx.beginPath();ctx.moveTo(na.x,na.y);ctx.lineTo(nb.x,nb.y);ctx.strokeStyle='#c8bfb0';ctx.lineWidth=2;ctx.stroke();});
+  nodes.forEach(n=>{
+    const col=nodeColors[n.id]||null, isSel=edgeSrc&&edgeSrc.id===n.id;
+    ctx.beginPath();ctx.arc(n.x,n.y,26,0,Math.PI*2);ctx.fillStyle=col?col:'#f5f0e8';ctx.fill();
+    ctx.strokeStyle=isSel?'#e07b4f':(col?'rgba(0,0,0,0.15)':'#c8bfb0');ctx.lineWidth=isSel?3:1.5;ctx.stroke();
+    ctx.fillStyle=col?'#fff':'#2c2416';ctx.font='bold 13px DM Sans,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(n.id,n.x,n.y);
+  });
+}
+function addRegionFromInput(){
+  const inp=document.getElementById('regionInput'), name=inp.value.trim().toUpperCase();
+  if(!name)return;if(nodes.find(n=>n.id===name)){inp.value='';return;}
+  const x=80+(nodes.length%5)*100, y=80+Math.floor(nodes.length/5)*100;
+  nodes.push({id:name,x,y});nodeColors={};inp.value='';draw();updateTags();
+}
+document.getElementById('regionInput').addEventListener('keydown',e=>{if(e.key==='Enter')addRegionFromInput();});
+function updateTags(){
+  const list=document.getElementById('regionTags');list.innerHTML='';
+  nodes.forEach(n=>{const tag=document.createElement('span');tag.className='tag';tag.textContent=n.id;tag.title='Click to delete';tag.onclick=()=>{nodes=nodes.filter(x=>x.id!==n.id);edges=edges.filter(([a,b])=>a!==n.id&&b!==n.id);nodeColors={};draw();updateTags();updateEdgeList();};list.appendChild(tag);});
+}
+function updateEdgeList(){
+  const list=document.getElementById('edgeList');list.innerHTML='';
+  edges.forEach(([a,b],i)=>{const item=document.createElement('div');item.className='edge-item';item.innerHTML=`${a} — ${b} <button class="del-btn" onclick="removeEdge(${i})">✕</button>`;list.appendChild(item);});
+}
+function removeEdge(i){edges.splice(i,1);nodeColors={};draw();updateEdgeList();}
+function resetAll(){nodes=[];edges=[];nodeColors={};edgeSrc=null;draw();updateTags();updateEdgeList();document.getElementById('statusBox').innerHTML='Add regions and connect neighbors, then click <strong>Solve with CSP</strong>.';}
+function loadSample(){
+  nodes=[{id:'WA',x:120,y:160},{id:'NT',x:260,y:120},{id:'SA',x:290,y:240},{id:'QLD',x:420,y:140},{id:'NSW',x:420,y:260},{id:'VIC',x:370,y:340},{id:'TAS',x:370,y:420}];
+  edges=[['WA','NT'],['WA','SA'],['NT','SA'],['NT','QLD'],['SA','QLD'],['SA','NSW'],['SA','VIC'],['QLD','NSW'],['NSW','VIC']];
+  nodeColors={};draw();updateTags();updateEdgeList();
+  document.getElementById('statusBox').innerHTML='Sample map loaded! Click <strong>▶ Solve with CSP</strong>.';
+}
+function getNeighborIds(id){return edges.flatMap(([a,b])=>a===id?[b]:b===id?[a]:[]);}
+function isSafe(id,color,assignment){return getNeighborIds(id).every(nb=>assignment[nb]!==color);}
+function backtrack(ids,assignment,colors){
+  if(Object.keys(assignment).length===ids.length)return true;
+  const id=ids.find(id=>!(id in assignment));
+  for(const color of colors){if(isSafe(id,color,assignment)){assignment[id]=color;if(backtrack(ids,assignment,colors))return true;delete assignment[id];}}
+  return false;
+}
+function solve(){
+  const colors=COLORS.filter((_,i)=>colorEnabled[i]).map(c=>c.hex);
+  if(!colors.length){document.getElementById('statusBox').innerHTML='<span style="color:#e74c3c">Please select at least one color!</span>';return;}
+  if(!nodes.length){document.getElementById('statusBox').innerHTML='<span style="color:#e74c3c">Please add some regions first!</span>';return;}
+  const assignment={};
+  if(backtrack(nodes.map(n=>n.id),assignment,colors)){
+    nodeColors=assignment;
+    document.getElementById('statusBox').innerHTML=`<div class="result">✅ Solved!</div>Used <strong>${new Set(Object.values(assignment)).size}</strong> color(s).<br/><br/>${Object.entries(assignment).map(([k,v])=>`<span style="display:inline-flex;align-items:center;gap:5px;margin:2px 4px 2px 0"><span style="width:10px;height:10px;border-radius:50%;background:${v};display:inline-block"></span>${k}</span>`).join('')}`;
   } else {
-    selectedColors.push(name);
-    el.classList.add('selected');
+    nodeColors={};
+    document.getElementById('statusBox').innerHTML='<span style="color:#e74c3c">❌ No solution found. Try adding more colors.</span>';
   }
-  updateHint();
+  draw();
 }
-
-function addRegion() {
-  const input = document.getElementById('regionInput');
-  const name = input.value.trim().toUpperCase();
-  if (!name || regions.includes(name)) { input.value = ''; return; }
-  regions.push(name);
-  adjacency[name] = [];
-  input.value = '';
-  renderChips();
-  updateSelects();
-  drawGraph();
-  updateHint();
-}
-
-function removeRegion(name) {
-  regions = regions.filter(r => r !== name);
-  delete adjacency[name];
-  for (const k in adjacency) adjacency[k] = adjacency[k].filter(r => r !== name);
-  renderChips();
-  updateSelects();
-  updateAdjList();
-  drawGraph();
-  updateHint();
-  document.getElementById('resultBox').style.display = 'none';
-}
-
-function renderChips() {
-  const el = document.getElementById('regionChips');
-  el.innerHTML = regions.map(r =>
-    `<div class="chip">${r}<span class="chip-x" onclick="removeRegion('${r}')">×</span></div>`
-  ).join('');
-}
-
-function updateSelects() {
-  ['adjA','adjB'].forEach(id => {
-    const sel = document.getElementById(id);
-    const val = sel.value;
-    sel.innerHTML = `<option value="">Region ${id==='adjA'?1:2}</option>` +
-      regions.map(r => `<option value="${r}"${r===val?' selected':''}>${r}</option>`).join('');
-  });
-}
-
-function addAdj() {
-  const a = document.getElementById('adjA').value;
-  const b = document.getElementById('adjB').value;
-  if (!a || !b || a === b) return;
-  if (!adjacency[a].includes(b)) {
-    adjacency[a].push(b);
-    adjacency[b].push(a);
-  }
-  updateAdjList();
-  drawGraph();
-  updateHint();
-}
-
-function updateAdjList() {
-  const el = document.getElementById('adjList');
-  el.innerHTML = regions.map(r =>
-    adjacency[r].length
-      ? `<div class="adj-item">${r} → <span>${adjacency[r].join(', ')}</span></div>`
-      : ''
-  ).join('');
-}
-
-function updateHint() {
-  if (regions.length === 0) { document.getElementById('hintBox').style.display='none'; return; }
-  const maxDeg = Math.max(...regions.map(r => adjacency[r].length), 0);
-  const lb = chromaticLB();
-  const ub = maxDeg + 1;
-  const hintEl = document.getElementById('hintBox');
-  hintEl.style.display = 'block';
-  hintEl.textContent = `💡 Min colors needed: ~${lb} | Safe upper bound: ${ub} | You selected: ${selectedColors.length}`;
-  if (selectedColors.length < lb) {
-    hintEl.style.borderColor = 'rgba(247,106,140,0.4)';
-    hintEl.style.color = '#f76a8c';
-    hintEl.textContent += ' ⚠ May need more colors!';
-  } else {
-    hintEl.style.borderColor = 'rgba(247,196,106,0.2)';
-    hintEl.style.color = '#f7c46a';
-  }
-}
-
-function chromaticLB() {
-  // Simple clique lower bound
-  let maxClique = 1;
-  for (const r of regions) {
-    const neighbors = adjacency[r];
-    let clique = 1;
-    for (let i = 0; i < neighbors.length; i++) {
-      for (let j = i+1; j < neighbors.length; j++) {
-        if (adjacency[neighbors[i]].includes(neighbors[j])) clique = Math.max(clique, 3);
-      }
-      clique = Math.max(clique, 2);
-    }
-    maxClique = Math.max(maxClique, clique);
-  }
-  return maxClique;
-}
-
-// CSP Backtracking
-function solve() {
-  if (regions.length === 0) { alert('Please add at least one region!'); return; }
-  if (selectedColors.length === 0) { alert('Please select at least one color!'); return; }
-
-  const assignment = {};
-  const sorted = [...regions].sort((a,b) => adjacency[b].length - adjacency[a].length);
-
-  function bt(idx) {
-    if (idx === sorted.length) return true;
-    const region = sorted[idx];
-    for (const color of selectedColors) {
-      if (adjacency[region].every(n => assignment[n] !== color)) {
-        assignment[region] = color;
-        if (bt(idx+1)) return true;
-        delete assignment[region];
-      }
-    }
-    return false;
-  }
-
-  const solved = bt(0);
-  showResult(solved, assignment);
-  drawGraph(assignment);
-}
-
-function showResult(solved, assignment) {
-  const el = document.getElementById('resultBox');
-  el.style.display = 'block';
-  if (!solved) {
-    el.innerHTML = `<div style="color:var(--accent2);font-family:'Space Mono',monospace;font-size:13px;padding:12px;border:1px solid rgba(247,106,140,0.3);border-radius:3px;background:rgba(247,106,140,0.05)">✗ No solution found with selected colors. Try adding more colors.</div>`;
-    return;
-  }
-  const colorUsed = new Set(Object.values(assignment));
-  const rows = Object.entries(assignment).map(([region, color]) => {
-    const hex = COLORS.find(c => c.name === color)?.hex || '#888';
-    return `<div class="result-row">
-      <span class="result-region">${region}</span>
-      <span class="result-arrow">→</span>
-      <div class="result-color-dot" style="background:${hex}"></div>
-      <span class="result-color-name" style="color:${hex}">${color}</span>
-    </div>`;
-  }).join('');
-  el.innerHTML = rows + `<div class="result-summary">✓ Solved! Used ${colorUsed.size} of ${selectedColors.length} colors. All constraints satisfied.</div>`;
-}
-
-// Canvas drawing
-function drawGraph(assignment) {
-  const canvas = document.getElementById('graphCanvas');
-  const ctx = canvas.getContext('2d');
-  canvas.width = canvas.offsetWidth;
-  const w = canvas.width, h = canvas.height || 320;
-
-  ctx.clearRect(0, 0, w, h);
-
-  if (regions.length === 0) {
-    ctx.fillStyle = '#2a2a3a';
-    ctx.font = "13px 'Space Mono', monospace";
-    ctx.textAlign = 'center';
-    ctx.fillText('Add regions to see the graph', w/2, h/2);
-    return;
-  }
-
-  // Compute positions in a circle
-  const cx = w/2, cy = h/2;
-  const r = Math.min(w, h) * 0.35;
-  const positions = {};
-  regions.forEach((reg, i) => {
-    const angle = (2 * Math.PI * i / regions.length) - Math.PI/2;
-    positions[reg] = { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
-  });
-
-  // Draw edges
-  const drawn = new Set();
-  regions.forEach(reg => {
-    adjacency[reg].forEach(neighbor => {
-      const key = [reg, neighbor].sort().join('-');
-      if (drawn.has(key)) return;
-      drawn.add(key);
-      ctx.beginPath();
-      ctx.moveTo(positions[reg].x, positions[reg].y);
-      ctx.lineTo(positions[neighbor].x, positions[neighbor].y);
-      ctx.strokeStyle = '#2a2a3a';
-      ctx.lineWidth = 2;
-      ctx.stroke();
-    });
-  });
-
-  // Draw nodes
-  regions.forEach(reg => {
-    const {x, y} = positions[reg];
-    const colorName = assignment ? assignment[reg] : null;
-    const hex = colorName ? (COLORS.find(c => c.name === colorName)?.hex || '#7c6af7') : '#1e1e2e';
-
-    // Glow
-    if (colorName) {
-      ctx.shadowColor = hex;
-      ctx.shadowBlur = 16;
-    }
-    ctx.beginPath();
-    ctx.arc(x, y, 22, 0, Math.PI*2);
-    ctx.fillStyle = colorName ? hex : '#1e1e2e';
-    ctx.fill();
-    ctx.strokeStyle = colorName ? hex : '#7c6af7';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    ctx.shadowBlur = 0;
-
-    // Label
-    ctx.fillStyle = colorName ? '#0a0a0f' : '#e8e8f0';
-    ctx.font = "bold 13px 'Space Mono', monospace";
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillText(reg, x, y);
-  });
-}
-
-function loadExample() {
-  resetAll();
-  ['A','B','C','D'].forEach(r => { regions.push(r); adjacency[r] = []; });
-  adjacency['A'] = ['B','C'];
-  adjacency['B'] = ['A','C','D'];
-  adjacency['C'] = ['A','B','D'];
-  adjacency['D'] = ['B','C'];
-  selectedColors = ['Crimson','Indigo','Emerald','Marigold'];
-  renderChips();
-  updateSelects();
-  updateAdjList();
-  initColors();
-  drawGraph();
-  updateHint();
-}
-
-function resetAll() {
-  regions = [];
-  adjacency = {};
-  selectedColors = ['Crimson','Indigo','Emerald','Marigold'];
-  renderChips();
-  updateSelects();
-  updateAdjList();
-  initColors();
-  drawGraph();
-  document.getElementById('hintBox').style.display = 'none';
-  document.getElementById('resultBox').style.display = 'none';
-}
-
-// Enter key
-document.getElementById('regionInput').addEventListener('keydown', e => { if (e.key==='Enter') addRegion(); });
-
-// Init
-initColors();
-drawGraph();
-window.addEventListener('resize', () => drawGraph());
 </script>
 </body>
 </html>
+ENDOFFILE
+echo "Done"
+Output
+
+Done
+Done
+
+You are out of free messages until 10:30 PM
+Get more
+
+
+
+Claude is AI and can make mistakes. Please double-check responses.
+Index · HTML
+Copy
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Map Coloring CSP</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f0e8; --card: #ffffff; --border: #e0d8cc;
+      --accent: #e07b4f; --accent2: #4f9e7b;
+      --text: #2c2416; --muted: #8a7d6a;
+      --shadow: 0 2px 12px rgba(80,60,20,0.08);
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
+    header { background: var(--card); border-bottom: 1.5px solid var(--border); padding: 18px 32px; display: flex; align-items: center; gap: 14px; box-shadow: var(--shadow); }
+    header .logo { width: 36px; height: 36px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    header h1 { font-size: 1.2rem; font-weight: 600; }
+    header span { font-size: 0.8rem; color: var(--muted); background: var(--bg); border: 1px solid var(--border); padding: 3px 10px; border-radius: 20px; margin-left: auto; font-family: 'DM Mono', monospace; }
+    .main { display: flex; flex: 1; height: calc(100vh - 73px); }
+    .canvas-area { flex: 1; display: flex; flex-direction: column; padding: 24px; gap: 16px; }
+    canvas { background: var(--card); border: 1.5px solid var(--border); border-radius: 16px; box-shadow: var(--shadow); flex: 1; width: 100%; }
+    .canvas-toolbar { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .mode-btn { padding: 8px 18px; border-radius: 8px; border: 1.5px solid var(--border); background: var(--card); color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .mode-btn:hover { border-color: var(--accent); color: var(--accent); }
+    .mode-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+    .solve-btn { margin-left: auto; padding: 10px 28px; border-radius: 10px; border: none; background: var(--accent2); color: white; font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .solve-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .reset-btn { padding: 10px 18px; border-radius: 10px; border: 1.5px solid var(--border); background: var(--card); color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.85rem; cursor: pointer; transition: all 0.15s; }
+    .reset-btn:hover { border-color: #c0392b; color: #c0392b; }
+    .hint { font-size: 0.78rem; color: var(--muted); background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 6px 14px; }
+    .sidebar { width: 280px; background: var(--card); border-left: 1.5px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; }
+    .sidebar-section { padding: 20px; border-bottom: 1px solid var(--border); }
+    .sidebar-section h3 { font-size: 0.75rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+    .input-row { display: flex; gap: 8px; }
+    input[type="text"] { flex: 1; padding: 8px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; background: var(--bg); color: var(--text); outline: none; transition: border 0.15s; }
+    input[type="text"]:focus { border-color: var(--accent); }
+    .add-btn { padding: 8px 14px; border-radius: 8px; border: none; background: var(--accent); color: white; font-size: 1rem; cursor: pointer; }
+    .add-btn:hover { opacity: 0.85; }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+    .tag { padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 500; font-family: 'DM Mono', monospace; border: 1.5px solid var(--border); background: var(--bg); color: var(--text); cursor: pointer; transition: all 0.12s; }
+    .tag:hover { border-color: #c0392b; color: #c0392b; }
+    .edge-hint { font-size: 0.75rem; color: var(--muted); margin-top: 8px; line-height: 1.5; }
+    .edge-list { display: flex; flex-direction: column; gap: 5px; margin-top: 8px; max-height: 120px; overflow-y: auto; }
+    .edge-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-family: 'DM Mono', monospace; color: var(--muted); padding: 4px 8px; border-radius: 6px; background: var(--bg); }
+    .del-btn { background: none; border: none; color: #c0392b; cursor: pointer; font-size: 0.85rem; opacity: 0.6; }
+    .del-btn:hover { opacity: 1; }
+    .color-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+    .color-check { display: flex; align-items: center; gap: 7px; font-size: 0.82rem; }
+    .color-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+    .status-box { padding: 20px; font-size: 0.82rem; color: var(--muted); line-height: 1.6; flex: 1; }
+    .status-box .result { font-size: 0.9rem; font-weight: 600; color: var(--accent2); margin-bottom: 8px; }
+    .sample-btn { width: 100%; padding: 9px; border-radius: 8px; border: 1.5px dashed var(--border); background: transparent; color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 0.82rem; cursor: pointer; transition: all 0.15s; margin-top: 10px; }
+    .sample-btn:hover { border-color: var(--accent); color: var(--accent); }
+  </style>
+</head>
+<body>
+<header>
+  <div class="logo">🗺️</div>
+  <h1>Map Coloring — CSP Solver</h1>
+  <span>Constraint Satisfaction Problem</span>
+</header>
+<div class="main">
+  <div class="canvas-area">
+    <div class="canvas-toolbar">
+      <button class="mode-btn active" id="modeAdd" onclick="setMode('add')">➕ Add Region</button>
+      <button class="mode-btn" id="modeEdge" onclick="setMode('edge')">🔗 Connect Regions</button>
+      <button class="mode-btn" id="modeDrag" onclick="setMode('drag')">✋ Drag</button>
+      <div class="hint" id="hintText">Click on canvas to place a region</div>
+      <button class="reset-btn" onclick="resetAll()">🗑 Reset</button>
+      <button class="solve-btn" onclick="solve()">▶ Solve with CSP</button>
+    </div>
+    <canvas id="canvas"></canvas>
+  </div>
+  <div class="sidebar">
+    <div class="sidebar-section">
+      <h3>Regions</h3>
+      <div class="input-row">
+        <input type="text" id="regionInput" placeholder="Region name (e.g. A)" maxlength="6" />
+        <button class="add-btn" onclick="addRegionFromInput()">+</button>
+      </div>
+      <div class="tag-list" id="regionTags"></div>
+      <button class="sample-btn" onclick="loadSample()">Load Sample Map</button>
+    </div>
+    <div class="sidebar-section">
+      <h3>Neighbors (Edges)</h3>
+      <div class="edge-hint">Switch to "Connect Regions" mode and click two nodes to add an edge.</div>
+      <div class="edge-list" id="edgeList"></div>
+    </div>
+    <div class="sidebar-section">
+      <h3>Available Colors</h3>
+      <div class="color-grid" id="colorGrid"></div>
+    </div>
+    <div class="status-box" id="statusBox">Add regions and connect neighbors, then click <strong>Solve with CSP</strong>.</div>
+  </div>
+</div>
+<script>
+const COLORS = [
+  { name: 'Red', hex: '#e74c3c' }, { name: 'Green', hex: '#27ae60' },
+  { name: 'Blue', hex: '#2980b9' }, { name: 'Yellow', hex: '#f1c40f' },
+  { name: 'Orange', hex: '#e67e22' }, { name: 'Purple', hex: '#8e44ad' },
+];
+let nodes = [], edges = [], colorEnabled = [true,true,true,true,false,false];
+let mode = 'add', edgeSrc = null, dragging = null, dragOffset = {x:0,y:0}, nodeColors = {};
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+function resize() { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; draw(); }
+window.addEventListener('resize', resize);
+setTimeout(resize, 50);
+function buildColorGrid() {
+  const grid = document.getElementById('colorGrid'); grid.innerHTML = '';
+  COLORS.forEach((c,i) => {
+    const label = document.createElement('label');
+    label.className = 'color-check';
+    label.innerHTML = `<input type="checkbox" ${colorEnabled[i]?'checked':''} onchange="toggleColor(${i},this.checked)"/><span class="color-dot" style="background:${c.hex}"></span>${c.name}`;
+    grid.appendChild(label);
+  });
+}
+buildColorGrid();
+function toggleColor(i,v) { colorEnabled[i]=v; }
+function setMode(m) {
+  mode=m; edgeSrc=null;
+  ['modeAdd','modeEdge','modeDrag'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  document.getElementById('mode'+m.charAt(0).toUpperCase()+m.slice(1)).classList.add('active');
+  const hints={add:'Click on canvas to place a region',edge:'Click two regions to connect them',drag:'Click and drag regions'};
+  document.getElementById('hintText').textContent=hints[m]; draw();
+}
+function getNode(x,y) { return nodes.find(n=>Math.hypot(n.x-x,n.y-y)<26); }
+canvas.addEventListener('mousedown',e=>{
+  const r=canvas.getBoundingClientRect(), x=e.clientX-r.left, y=e.clientY-r.top;
+  if(mode==='drag'){const n=getNode(x,y);if(n){dragging=n;dragOffset={x:x-n.x,y:y-n.y};}}
+  else if(mode==='add'){if(!getNode(x,y)){const name=String.fromCharCode(65+nodes.length);nodes.push({id:name,x,y});nodeColors={};draw();updateTags();}}
+  else if(mode==='edge'){const n=getNode(x,y);if(n){if(!edgeSrc){edgeSrc=n;draw();}else if(edgeSrc!==n){const exists=edges.some(e=>(e[0]===edgeSrc.id&&e[1]===n.id)||(e[0]===n.id&&e[1]===edgeSrc.id));if(!exists){edges.push([edgeSrc.id,n.id]);nodeColors={};updateEdgeList();}edgeSrc=null;draw();}}}
+});
+canvas.addEventListener('mousemove',e=>{if(dragging){const r=canvas.getBoundingClientRect();dragging.x=e.clientX-r.left-dragOffset.x;dragging.y=e.clientY-r.top-dragOffset.y;draw();}});
+canvas.addEventListener('mouseup',()=>{dragging=null;});
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  edges.forEach(([a,b])=>{const na=nodes.find(n=>n.id===a),nb=nodes.find(n=>n.id===b);if(!na||!nb)return;ctx.beginPath();ctx.moveTo(na.x,na.y);ctx.lineTo(nb.x,nb.y);ctx.strokeStyle='#c8bfb0';ctx.lineWidth=2;ctx.stroke();});
+  nodes.forEach(n=>{
+    const col=nodeColors[n.id]||null, isSel=edgeSrc&&edgeSrc.id===n.id;
+    ctx.beginPath();ctx.arc(n.x,n.y,26,0,Math.PI*2);ctx.fillStyle=col?col:'#f5f0e8';ctx.fill();
+    ctx.strokeStyle=isSel?'#e07b4f':(col?'rgba(0,0,0,0.15)':'#c8bfb0');ctx.lineWidth=isSel?3:1.5;ctx.stroke();
+    ctx.fillStyle=col?'#fff':'#2c2416';ctx.font='bold 13px DM Sans,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(n.id,n.x,n.y);
+  });
+}
+function addRegionFromInput(){
+  const inp=document.getElementById('regionInput'), name=inp.value.trim().toUpperCase();
+  if(!name)return;if(nodes.find(n=>n.id===name)){inp.value='';return;}
+  const x=80+(nodes.length%5)*100, y=80+Math.floor(nodes.length/5)*100;
+  nodes.push({id:name,x,y});nodeColors={};inp.value='';draw();updateTags();
+}
+document.getElementById('regionInput').addEventListener('keydown',e=>{if(e.key==='Enter')addRegionFromInput();});
+function updateTags(){
+  const list=document.getElementById('regionTags');list.innerHTML='';
+  nodes.forEach(n=>{const tag=document.createElement('span');tag.className='tag';tag.textContent=n.id;tag.title='Click to delete';tag.onclick=()=>{nodes=nodes.filter(x=>x.id!==n.id);edges=edges.filter(([a,b])=>a!==n.id&&b!==n.id);nodeColors={};draw();updateTags();updateEdgeList();};list.appendChild(tag);});
+}
+function updateEdgeList(){
+  const list=document.getElementById('edgeList');list.innerHTML='';
+  edges.forEach(([a,b],i)=>{const item=document.createElement('div');item.className='edge-item';item.innerHTML=`${a} — ${b} <button class="del-btn" onclick="removeEdge(${i})">✕</button>`;list.appendChild(item);});
+}
+function removeEdge(i){edges.splice(i,1);nodeColors={};draw();updateEdgeList();}
+function resetAll(){nodes=[];edges=[];nodeColors={};edgeSrc=null;draw();updateTags();updateEdgeList();document.getElementById('statusBox').innerHTML='Add regions and connect neighbors, then click <strong>Solve with CSP</strong>.';}
+function loadSample(){
+  nodes=[{id:'WA',x:120,y:160},{id:'NT',x:260,y:120},{id:'SA',x:290,y:240},{id:'QLD',x:420,y:140},{id:'NSW',x:420,y:260},{id:'VIC',x:370,y:340},{id:'TAS',x:370,y:420}];
+  edges=[['WA','NT'],['WA','SA'],['NT','SA'],['NT','QLD'],['SA','QLD'],['SA','NSW'],['SA','VIC'],['QLD','NSW'],['NSW','VIC']];
+  nodeColors={};draw();updateTags();updateEdgeList();
+  document.getElementById('statusBox').innerHTML='Sample map loaded! Click <strong>▶ Solve with CSP</strong>.';
+}
+function getNeighborIds(id){return edges.flatMap(([a,b])=>a===id?[b]:b===id?[a]:[]);}
+function isSafe(id,color,assignment){return getNeighborIds(id).every(nb=>assignment[nb]!==color);}
+function backtrack(ids,assignment,colors){
+  if(Object.keys(assignment).length===ids.length)return true;
+  const id=ids.find(id=>!(id in assignment));
+  for(const color of colors){if(isSafe(id,color,assignment)){assignment[id]=color;if(backtrack(ids,assignment,colors))return true;delete assignment[id];}}
+  return false;
+}
+function solve(){
+  const colors=COLORS.filter((_,i)=>colorEnabled[i]).map(c=>c.hex);
+  if(!colors.length){document.getElementById('statusBox').innerHTML='<span style="color:#e74c3c">Please select at least one color!</span>';return;}
+  if(!nodes.length){document.getElementById('statusBox').innerHTML='<span style="color:#e74c3c">Please add some regions first!</span>';return;}
+  const assignment={};
+  if(backtrack(nodes.map(n=>n.id),assignment,colors)){
+    nodeColors=assignment;
+    document.getElementById('statusBox').innerHTML=`<div class="result">✅ Solved!</div>Used <strong>${new Set(Object.values(assignment)).size}</strong> color(s).<br/><br/>${Object.entries(assignment).map(([k,v])=>`<span style="display:inline-flex;align-items:center;gap:5px;margin:2px 4px 2px 0"><span style="width:10px;height:10px;border-radius:50%;background:${v};display:inline-block"></span>${k}</span>`).join('')}`;
+  } else {
+    nodeColors={};
+    document.getElementById('statusBox').innerHTML='<span style="color:#e74c3c">❌ No solution found. Try adding more colors.</span>';
+  }
+  draw();
+}
+</script>
+</body>
+</html>
+ 
